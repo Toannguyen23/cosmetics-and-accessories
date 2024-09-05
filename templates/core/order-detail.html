@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+        }
+        .header {
+            background: #333;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+        }
+        .menu {
+            display: flex;
+            background: #eee;
+            padding: 10px;
+            justify-content: center;
+        }
+        .menu button {
+            background: #fff;
+            border: 1px solid #ddd;
+            padding: 10px 20px;
+            margin: 0 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .menu button.active {
+            background: #333;
+            color: #fff;
+        }
+        .content {
+            display: none;
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background: #f4f4f4;
+        }
+        .logout-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #e74c3c;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+        }
+        .logout-button:hover {
+            background: #c0392b;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Xin chào, {{request.user}}!</h1>
+    </div>
+
+    <div class="container">
+        <!-- Menu -->
+        <div class="menu">
+            <button onclick="showContent('details')">Chi tiết đơn hàng</button>
+            <button onclick="showContent('logout')">Logout</button>
+        </div>
+
+
+        <div id="details" class="content">
+            <h2>Chi tiết đơn hàng</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Chi tiết hóa đơn</th>
+                        <th>Ngày đặt</th>
+                        <th>Hình ảnh</th>
+                        <th>Số lượng</th>
+                        <th>Giá</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    {% for product in products %}
+                    <tr>
+                        <td>{{product.invoice_no}}</td>
+                        <td>{{product.order.order_date}}</td>
+                        <td><p><img src="{{product.image}}" style="height: 50px; width: 50px;"></p></td>
+                        <td>{{product.quantity}}</td>
+                        <td>{{product.price}}</td>
+
+                    </tr>
+                    {% endfor %}
+                    <!-- More rows as needed -->
+                </tbody>
+            </table>
+        </div>
+
+        <div id="logout" class="content" style="text-align: center;">
+            <h2>Logout</h2>
+            <a href="logout.html" class="logout-button">Logout</a>
+        </div>
+    </div>
+
+    <script>
+        function showContent(id) {
+            // Hide all content sections
+            document.querySelectorAll('.content').forEach(function(section) {
+                section.style.display = 'none';
+            });
+
+            // Remove active class from all buttons
+            document.querySelectorAll('.menu button').forEach(function(button) {
+                button.classList.remove('active');
+            });
+
+            // Show the selected content section
+            document.getElementById(id).style.display = 'block';
+
+            // Set active class on the clicked button
+            document.querySelector(`.menu button[onclick="showContent('${id}')"]`).classList.add('active');
+        }
+
+        // Show the first section by default
+        document.addEventListener('DOMContentLoaded', function() {
+            showContent('orders');
+        });
+    </script>
+</body>
+</html>

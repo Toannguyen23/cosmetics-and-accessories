@@ -1,0 +1,215 @@
+{% extends "partial/base.html" %}
+{% load static %}
+<head>
+    <style>
+        input[type="range"]{
+            -webkit-appearance: none;
+            margin-right: 15px;
+            height: 7px;
+            width: 220px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 5px;
+            background-image: linear-gradient(#3bb77e, #3bb77e);
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+        }
+        input[type="range"]::-webkit-slider-thumb{
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #3bb77e;
+            cursor: ew-resize;
+            box-shadow: 0 0 2px 0 #555;
+            transition: background .3e ease-in-out;
+        }
+        input[type=range]::-webkit-slider-runnable-track{
+            -webkit-appearance: none;
+            box-shadow: none;
+            border: none;
+            background: transparent;
+        }
+        .filter-button {
+            /* Các thuộc tính kiểu dáng cho nút */
+            background-color: #4CAF50; /* Màu xanh lá cây */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;   
+          
+            font-size: 16px;
+            /* Căn giữa chữ trong nút */
+            display: inline-block;
+            text-align: center;
+          }
+          .btn {
+            display: block;
+            margin: 0 auto;
+          }
+          .cnt{
+            height: 75px;
+            width: 220px;
+            padding: 0px 0px 10px 10px;
+            color: #CC9900;
+          }
+    </style>
+</head>
+{% block content %}
+
+
+
+    <!-- Breadcrumb Start -->
+    <div class="container-fluid">
+        <div class="row px-xl-5">
+            <div class="col-12">
+                <nav class="breadcrumb bg-light mb-30">
+                    <a class="breadcrumb-item text-dark" href="{% url "core:index" %}">Trang chủ</a>
+                    <span class="breadcrumb-item active">Sản phẩm</span>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumb End -->
+
+
+    <!-- Shop Start -->
+    <div class="container-fluid">
+        <div class="row px-xl-5">
+            <!-- Shop Sidebar Start -->
+            <div class="col-lg-3 col-md-4">
+                <!-- Price Start -->
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Lọc theo loại</span></h5>
+                <div class="bg-light p-4 mb-30">
+                        {% for category in categories %}
+                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                            <input type="checkbox" data-filter="category" class="custom-control-input filter-checkbox" id="catergorycheck{{category.id}}" name="checkbox" value="{{category.id}}">
+                            <p class="custom-control-label" for="categorycheck{{category.id}}">{{category.title}}</p>
+                        </div>
+                        {% endfor %}    
+                </div>
+                <!-- Price End -->
+                
+                <!-- Color Start -->
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Theo nhà phân phối</span></h5>
+                <div class="bg-light p-4 mb-30">
+                   {% for vendor in vendors %}
+                       <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3" >
+
+                            <input type="checkbox" name="checkbox" data-filter="vendor" class="custom-control-input filter-checkbox" id="vendorcheck{{vendor.id}}" value ="{{vendor.id}}">
+                            <p class="custom-control-label" for="vendorcheck{{vendor.id}}">{{vendor.title}}</p>
+                     
+                        </div>
+                        {% endfor %}
+                </div>
+                <!-- Color End -->
+
+                <!-- Size Start -->
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Lọc theo giá</span></h5>
+                <div class="bg-light p-4 mb-30 ">
+                   <input type="range" name="ranDge" class="range-slider" id="range" min="{{min_max_price.price__min|floatformat:1}}" max="{{min_max_price.price__max|floatformat:1}}" oninput="max_price.value=this.value" >
+                    <div>
+                        <input type="number" name="" class="cnt" id="max_price" placeholder="Giá hiện tại" min="{{min_max_price.price__min}}" max="{{min_max_price.price__max}}" onkeyup="range.value=this.value" >
+                    </div>
+                   <div class="d-flex justify-content-between">
+                    
+                   <div class="caption">Từ: <strong id="slider-range-value1" class="text">{{min_max_price.price__min|floatformat:1}}VND</strong></div>
+                   <div class="caption">Đến: <strong id="slider-range-value2" class="text">{{min_max_price.price__max|floatformat:1}} VND</strong></div>
+
+                   </div>
+                   <div class="button-checkbox">
+                    <button class=" btn filter-button" type="button" id="btn-filter-check">Lọc</button>
+                </div>
+                </div>
+                <!-- Size End -->
+            </div>
+            <!-- Shop Sidebar End -->
+
+
+            <!-- Shop Product Start -->
+            <div class="col-lg-9 col-md-8">
+                <div class="row pb-3" id="filterd-product">
+                    <div class="col-12 pb-1">
+                        <div class="d-flex align-items-center justify-content-between mb-4">
+                            <div>
+                                <button class="btn btn-sm btn-light"><i class="fa fa-th-large"></i></button>
+                                <button class="btn btn-sm btn-light ml-2"><i class="fa fa-bars"></i></button>
+                            </div>
+                            <div class="ml-2">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">Sorting</button>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        <a class="dropdown-item" href="#">Latest</a>
+                                        <a class="dropdown-item" href="#">Popularity</a>
+                                        <a class="dropdown-item" href="#">Best Rating</a>
+                                    </div>
+                                </div>
+                                <div class="btn-group ml-2">
+                                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">Showing</button>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        <a class="dropdown-item" href="#">10</a>
+                                        <a class="dropdown-item" href="#">20</a>
+                                        <a class="dropdown-item" href="#">30</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    {% for product in products %}
+                    <div class="col-lg-4 col-md-6 col-sm-6 pb-1">
+                        
+                        <div class="product-item bg-light mb-4">
+                            
+                            <div class="product-img position-relative overflow-hidden" class="col-lg-4 col-md-6 col-sm-6 pb-1">
+                                <div style="width: 290px; height: 270px;" >
+                                    <img class="img-fluid w-100" src='{{product.image.url}}'  alt="">
+                                    </div>
+                                <div class="product-action">
+                                    <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
+                                    <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
+                                    <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
+                                    <a class="btn btn-outline-dark btn-square" href="{% url "core:product-detail" product.pid %}"><i class="fa fa-search"></i></a>
+                                </div>
+                            </div>
+                            <div class="text-center py-4">
+                                <a class="h6 text-decoration-none text-truncate" href="">{{product.title}}</a>
+                                <div class="d-flex align-items-center justify-content-center mt-2">
+                                    <h5>{{product.price}}</h5><h6 class="text-muted ml-2"><del>{{product.old_price}}</del></h6>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-center mb-1">
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                    <small>(99)</small>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                   
+                    <div class="col-12">
+                        <nav>
+                          <ul class="pagination justify-content-center">
+                            <li class="page-item disabled"><a class="page-link" href="#">Trang trước</span></a></li>
+                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item"><a class="page-link" href="#">Trang sau</a></li>
+                          </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <!-- Shop Product End -->
+        </div>
+    </div>
+    <!-- Shop End -->
+
+
+
+    {% endblock content %}

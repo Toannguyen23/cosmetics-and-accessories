@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendor Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            
+        }
+        .header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            text-align: center;
+        }
+        .container {
+            display: flex;
+        }
+        .sidebar {
+            width: 200px;
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+        .sidebar a {
+            color: #fff;
+            text-decoration: none;
+            display: block;
+            padding: 10px 0;
+            border-bottom: 1px solid #444;
+        }
+        .sidebar a:hover {
+            background-color: #575757;
+        }
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            flex: 1;
+        }
+        .card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .card h2 {
+            margin-top: 0;
+        }
+        .custom {
+            height: 100px;
+            width: 220px;
+            background: #fafbfd;
+            margin-left: 15px;
+            text-align: center;
+            
+        }
+        .icon {
+            float: left;
+            position: absolute;
+        }
+        
+        .div-content {
+            clear: both;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        
+        th, td {
+            text-align: center;
+            padding: 8px;
+        }
+        
+        th {
+            background-color: #f2f2f2;
+        }
+        
+        tr:nth-child(even) {
+            background-color:   
+         #f2f2f2;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+
+    <div class="header">
+        <h1>Xin chào!</h1>
+    </div>
+
+    <div class="container">
+        <div class="sidebar">
+            <h2>Chế độ xem</h2>
+            <a href="#overview">Tổng Quan</a>
+            <a href="#orders">Orders</a>
+            <a href="{% url "useradmin:products" %}">Sản phẩm</a>
+            <a href="{% url "useradmin:add-product" %}">Thêm sản phẩm</a>
+            <a href="#settings">Settings</a>
+        </div>
+
+        <div class="main-content">
+            <div class="card" id="overview">
+                <h2>Overview</h2>
+
+                <p>Welcome to your dashboard. Here you can get an overview of your current status, recent activities, and important updates.</p>
+            </div>
+            
+            <div class="card" id="orders">
+                <h2>Orders</h2>
+                <table>
+                    <td>
+                        <div class="custom">
+                            <i class="fa-solid fa-hand-holding-dollar fa-2xl" style="color: #c93131;"></i>
+                            <p>Lợi nhuận</p>
+                            <p>{{revenue.price|floatformat:0}} VND</p>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="custom">
+                            <i class="fa-solid fa-truck-fast fa-2xl " style="color: #163160;"></i>
+                            <p>Đơn hàng</p>
+                            <p>{{total_orders_count.count}}</p>
+                        </div>
+                        
+                    </td>
+                    <td>
+                        <div class="custom">
+                            <i class="fa-solid fa-briefcase fa-2xl" style="color: #5d0995;"></i>
+                            <p>Sản phẩm</p>
+                            <p>{{all_products.count}}</p>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="custom">
+                            <i class="fa-solid fa-shapes fa-2xl" style="color: #5c9226;"></i>
+                            <p>Tổng tháng</p>
+                        <p>{{monthly_revenue.price|floatformat:0}} VND</p>
+                        </div>
+                    </td>
+                </table>
+            </div>
+            
+            <div class="card" id="products">
+                <h2>Chi tiết đơn hàng tháng {{this_month}}</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Đơn hàng</th>
+                        <th>Ngày Đặt</th>
+                        <th>Người đặt</th>
+                        <th>Số điện thoại</th>
+                        <th>Tổng tiền</th>
+                        <th>Chi tiết</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in latest_orders %}
+                    <tr>
+                        <td>#{{order.oid}}</td>
+                        <td>{{order.order_date}}</td>
+            
+                        <td>{{order.fullname}}</td>
+                       
+                        <td>{{order.phone}}</td>
+                        
+                        <td>{{order.price|floatformat:0}}</td>
+                        <td><a href="">Chi tiết tại</a></td>
+
+                        
+                    </tr>
+                    {% endfor %}
+                    <!-- More rows as needed -->
+                </tbody>
+            </table>
+            </div>
+            
+            <div class="card" id="reports">
+                <h2>Reports</h2>
+                <p>View various reports related to sales, performance, and other metrics.</p>
+            </div>
+            
+            <div class="card" id="settings">
+                <h2>Settings</h2>
+                <p>Configure your account settings, preferences, and other configurations.</p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

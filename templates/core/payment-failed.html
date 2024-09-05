@@ -1,0 +1,62 @@
+
+{% extends "partial/base.html" %}
+{% block content %}
+<header>
+<style>
+    ._success {
+        box-shadow: 0 15px 25px #00000019;
+        padding: 45px;
+        width: 100%;
+        text-align: center;
+        margin: 40px auto;
+        border-bottom: solid 4px #28a745;
+    }
+    
+    ._success i {
+        font-size: 55px;
+        color: #28a745;
+    }
+    
+    ._success h2 {
+        margin-bottom: 12px;
+        font-size: 40px;
+        font-weight: 500;
+        line-height: 1.2;
+        margin-top: 10px;
+    }
+    
+    ._success p {
+        margin-bottom: 0px;
+        font-size: 18px;
+        color: #495057;
+        font-weight: 500;
+    }
+    ._failed{ border-bottom: solid 4px red !important; }
+    ._failed i{  color:red !important;  }
+
+    . div-color {
+        height : 16 px;
+        width: 50 px;
+        color : yellow;
+
+        text-align: center;
+    }
+</style>
+</header>
+
+<div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-5">
+        <div class="message-box _success _failed">
+            
+          <i class="fa fa-times-circle" aria-hidden="true"></i>
+          <h2> Thanh toán thất bại </h2>
+        
+          <a href="" style="background: blue; color: white; height: 50px; width: 220px; "> Vui lòng thử lại</a>
+         
+        </div>
+      </div>
+    </div>
+  
+  </div>
+  {% endblock content %}

@@ -1,0 +1,128 @@
+{% extends "partial/base.html" %}
+
+{% block content %}
+
+<div class="container-fluid" id="#cart-list">
+    <div class="row px-xl-5">
+        <div class="col-lg-8 table-responsive mb-5">
+            <table class="table table-light table-borderless table-hover text-center mb-0">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Hình ảnh</th>
+                        <th>Sản phẩm</th>
+                        <th>Giá</th>
+                        <th>Số lượng</th>
+                        <th>Tổng</th>
+                        <th>Loại bỏ</th>
+                    </tr>
+                </thead>
+                <p>Có <span>{{totalCartItems}}</span> sản phẩm trong giỏ hàng</p>
+                <tbody class="align-middle" id="#cart-list">
+                    {% for product_id, item in cart_data.items %}
+                    <tr class="tr-row-1">
+                        <td class="align-middle"><img {% if item.image in item.image %} src="{{item.image}}" {% else %} src="{{item.image.0}}" {% endif %}  alt="" style="width: 50px; height: 50px;"></td>
+                        <td class="align-middle">{% if item.title in item.title %}{{item.title}}{% else %}{{item.title.0}}{% endif %}</td>
+                        <td class="align-middle">{{item.price}}</td>
+                        <td class="align-middle">
+                            <div class="input-group quantity mx-auto" style="width: 100px;">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-sm btn-primary btn-minus  update-product" data-product="{{product_id}}" >
+                                    <i class="fa fa-minus"></i>
+                                    </button>
+                                </div>
+                                <input type="number" class="form-control form-control-sm bg-secondary border-0 text-center product-qty-{{product_id}}" placeholder="SL" value="{{item.qty}}">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-sm btn-primary btn-plus update-product" data-product="{{product_id}}">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="align-middle">{% widthratio item.price 1 item.qty %}</td>
+                        <td class="align-middle"><button class="btn btn-sm btn-danger delete-product" data-product="{{product_id}}"><i class="fa fa-times delete-product"></i></button></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+        </div>
+
+        <div class="container-fluid">
+            <div class="row px-xl-5">
+                <div class="col-lg-8">
+                    <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Địa chỉ thanh toán</span></h5>
+                    <div class="bg-light p-30 mb-5">
+                        <form method="POST" action="{% url "core:save-checkout-infor" %}">
+                            {% csrf_token %}
+                        <div class="row">
+                            
+                            <div class="col-md-6 form-group">
+                                <label>Họ và Tên</label>
+                                <input class="form-control" name="fullname" type="text" placeholder="Nguyễn Văn A">
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>E-mail</label>
+                                <input class="form-control" name="email" type="text" placeholder="example@email.com">
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>Số điện thoại</label>
+                                <input class="form-control" name="phone" type="text" placeholder="+123 456 789">
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>Địa chỉ</label>
+                                <input class="form-control" name="address" type="text" placeholder="123 tên đường">
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>Tỉnh thành</label>
+                                <input class="form-control" name="state" type="text" placeholder="Long An">
+                            </div>
+
+                            <div class="col-md-6 form-group">
+                                <label>ZIP Code</label>
+                                <input class="form-control" name="zipcode" type="text" placeholder="123">
+                            </div>
+                        </div>
+                        <button class="btn btn-block btn-primary font-weight-bold my-3 py-3" type="submit">Tiến hành thanh toán</button>
+                    </form>
+                    
+                    </div>
+                </div>
+
+
+        
+        <div class="col-lg-4">
+            <form class="mb-30" action="">
+                <div class="input-group">
+                    <input type="text" class="form-control border-0 p-4" placeholder="Coupon Code">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary">Mã giảm giá</button>
+                    </div>
+                </div>
+            </form>
+           
+            <div class="bg-light p-30 mb-5">
+                <div class="border-bottom pb-2">
+                    <div class="d-flex justify-content-between mb-3">
+                        <h6>Tổng</h6>
+                        <h6>{{cart_total_amount}}</h6>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <h6 class="font-weight-medium">Phí giao hàng:</h6>
+                        <h6 class="font-weight-medium">Miễn phí</h6>
+                    </div>
+                </div>
+                <div class="pt-2">
+                    <div class="d-flex justify-content-between mt-2">
+                        <h5>Tổng tiền:</h5>
+                        <h5>{{cart_total_amount|floatformat:0}} đồng</h5>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock content %}

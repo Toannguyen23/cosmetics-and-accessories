@@ -1,0 +1,36 @@
+
+<div class="col-lg-8 table-responsive mb-5"  style="margin: 0 auto;">
+    <table class="table table-light table-borderless table-hover text-center mb-0">
+        <thead class="thead-dark">
+            <tr>
+                <th>Hình ảnh</th>
+                <th>Sản phẩm</th>
+                <th>Giá</th>
+                <th>Số lượng</th>
+                <th>Trong kho</th>
+                <th>Loại bỏ</th>
+            </tr>
+        </thead>
+        <p>Có <span>{{wishlist.count}}</span> sản phẩm trong wishlist</p>
+        <tbody class="align-middle" id="#cart-list">
+            {% for wishlist in wishlist %}
+            <tr class="tr-row-1">
+                <td class="align-middle"><img  src="{{wishlist.product.image.url}}"  alt="" style="width: 50px; height: 50px;"></td>
+                <td class="align-middle">{{wishlist.product.title}}</td>
+                <td class="align-middle">{{wishlist.product.price}}</td>
+                <td class="align-middle">
+                    <div class="input-group quantity mx-auto" style="width: 100px;">
+                        {% if wishlist.product.in_stock %}
+                        <p class="form-control form-control-sm bg-secondary border-0 text-center" >Còn</p>
+                        {% else %}
+                        <p class="form-control form-control-sm bg-secondary border-0 text-center" >Đã hết</p>
+                        {% endif %}
+                    </div>
+                </td>
+                <td class="align-middle"><a href="{% url "core:product-list" %}">Mua sắm</a></td>
+                <td class="align-middle"><button class="btn btn-sm btn-danger delete-wishlist" data-product="{{wishlist.id}}"><i class="fa fa-times"></i></button></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

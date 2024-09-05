@@ -1,0 +1,33 @@
+{% extends "partial/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="container-fluid pt-5">
+    <h4 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Danh sách nhà cung cấp</span></h4>
+    <div class="row px-xl-5 pb-3">
+        {% for vendor in vendors %}
+        <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
+            <a class="text-decoration-none" href="{% url "core:category-list"  %}">
+                <div class="cat-item d-flex align-items-center mb-4">
+                    <div class="overflow-hidden" style="width: 100px; height: 100px;">
+                        <img class="img-fluid" src="{{vendor.image.url}}" alt="">
+                    </div>
+                    <div class="flex-fill pl-3">
+                        <h6>{{vendor.title}}</h6>
+                        <div>
+                        <small class="text-body">Địa chỉ: {{vendor.address}} </small>
+                        </div>
+                        <div>
+
+                        <small class="text-body">Liên hệ: {{vendor.contact}} </small>
+                        </div>
+                        <small class="text-body">Có {{vendor.vendor.count}} Sản phẩm được bán</small>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}
